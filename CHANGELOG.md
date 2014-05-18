@@ -1,0 +1,7 @@
+# CHANGELOG for privoxy
+
+This file is used to list changes made in each version of privoxy.
+
+1.0.0
+-----
+- Initial release of privoxy cookbook
