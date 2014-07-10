@@ -5,8 +5,8 @@ confdir /etc/privoxy
 logdir /var/log/privoxy
 actionsfile match-all.action # Actions that are applied to all sites and maybe overruled later on.
 actionsfile default.action   # Main actions file
-<% if node[:privoxy][:adblockplus_subscription] == true -%>
-  <% node[:privoxy][:url][:list].each do |list| -%>
+<% if node['privoxy']['adblockplus_subscription'] == true -%>
+  <% node['privoxy']['url']['list'].each do |list| -%>
 actionsfile <%= list.split("/")[-1].split(".")[0] %>.script.action
 filterfile <%= list.split("/")[-1].split(".")[0] %>.script.filter
   <% end -%>
@@ -15,7 +15,7 @@ actionsfile user.action      # User customizations
 filterfile default.filter
 filterfile user.filter      # User customizations
 logfile logfile
-listen-address  localhost:<%= node[:privoxy][:port] %>
+listen-address  localhost:<%= node['privoxy']['port'] %>
 toggle  1
 enable-remote-toggle  0
 enable-remote-http-toggle  0

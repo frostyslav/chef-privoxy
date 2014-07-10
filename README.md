@@ -9,52 +9,53 @@ Requirements
 - RedHat-family Linux Distributions
 
 ### Cookbooks
+- Depends on `checkinstall` cookbook
 - When running on Rhel based systems, the node must include the `yum-epel` cookbook
 
 Attributes
 ----------
 ### Recommended tunables
 
-* `privoxy[:install_method]`
+* `privoxy['install_method']`
   - String. Defaults to `source`. Can be `source` or `package`
   - `source` downloads source codes and compile them, then executes checkinstall to install as package
   - `package` installs package from the existing repo via apt or yum, depending on the distribution
 
-* `privoxy[:url]`
+* `privoxy['url']`
   - String. Points to the privoxy source codes archive location
 
-* `privoxy[:version]`
+* `privoxy['version']`
   - String. Privoxy version to be compiled
 
-* `privoxy[:checksum]`
+* `privoxy['checksum']`
   - String. Source codes archive checksum
 
-* `privoxy[:adblockplus_subscription]`
+* `privoxy['adblockplus_subscription']`
   - Bool. Flag to use AdBlock Plus subscriptions for ad blocking
   - Defaults to false
 
-* `privoxy[:url][:list]`
+* `privoxy['url']['list']`
   - Array. List of AdBlock Plus subscription URLs
 
-* `privoxy[:port]`
+* `privoxy['port']`
   - String. Port for Privoxy to listen
-  - Defaults to 8118
+  - Defaults to 8090
 
 ### Source specific
 
-* `privoxy[:prefix_dir]`
+* `privoxy['prefix_dir']`
   - String. The path to prefix dir
   - Defaults to `/`
 
-* `privoxy[:exec_prefix_dir]`
+* `privoxy['exec_prefix_dir']`
   - String. The path to exec_prefix dir
   - Defaults to `/usr`
 
-* `privoxy[:config_dir]`
+* `privoxy['config_dir']`
   - String. The path to configuration file dir
   - Defaults to `/etc/privoxy`
 
-* `privoxy[:doc_dir]`
+* `privoxy['doc_dir']`
   - String. The path to docs dir
   - Defaults to `/usr/share`
 
@@ -71,7 +72,6 @@ Just include `privoxy` in your node's `run_list`:
   ]
 }
 ```
-
 
 License and Authors
 -------------------

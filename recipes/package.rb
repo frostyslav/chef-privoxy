@@ -20,13 +20,11 @@
 
 include_recipe "yum-epel" if platform_family?("rhel")
 
-%w{privoxy}.each do |pkg|
-  package pkg do
-    action :install
-  end
+package "privoxy" do
+  action :install
 end
 
-case node[:platform]
+case node['platform']
   when "redhat", "centos", "amazon", "scientific"
     template "/etc/init.d/privoxy" do
       source "privoxy.init.rhel.erb"

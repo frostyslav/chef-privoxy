@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-case node[:platform]
+case node['platform']
   when "debian", "ubuntu"
     privoxy_init = "privoxy.init.debian.erb"
   when "redhat", "centos", "amazon", "scientific"
@@ -34,38 +34,35 @@ end
 
 template "/etc/privoxy/config" do
   source "privoxy.conf.erb"
-  owner  node[:privoxy][:user]
-  group  node[:privoxy][:group]
+  owner  node['privoxy']['user']
+  group  node['privoxy']['group']
   mode   00744
-  notifies :restart, "service[privoxy]"
+  notifies :restart, "service[privoxy]", :delayed
 end
 
-service "privoxy" do
-  action [:enable, :start]
-end
-
-if node[:privoxy][:adblockplus_subscription] == true
+if node['privoxy']['adblockplus_subscription'] == true
   template "/etc/privoxy/privoxy-blacklist" do
     source "privoxy-blacklist.erb"
-    owner  node[:privoxy][:user]
-    group  node[:privoxy][:group]
+    owner  node['privoxy']['user']
+    group  node['privoxy']['group']
     mode   00744
   end
 
   template "/etc/privoxy/privoxy-blocklist.sh" do
     source "privoxy-blocklist.sh.erb"
-    owner  node[:privoxy][:user]
-    group  node[:privoxy][:group]
+    owner  node['privoxy']['user']
+    group  node['privoxy']['group']
     mode   00744
-    notifies :restart, "service[privoxy]"
+    notifies :restart, "service[privoxy]", :delayed
   end
 
-  bash "fill-adblock-lists" do
-    cwd node[:privoxy][:config_dir]
-    code <<-EOF
-    bash #{[:privoxy][:config_dir]}/privoxy-blocklist.sh
-    touch #{[:privoxy][:config_dir]}/adblocklists.created
-    EOF
-    not_if { File.exists?("#{[:privoxy][:config_dir]}/adblocklists.created")}
+  execute "download adblock lists" do
+    cwd node['privoxy']['config_dir']
+    command "bash #{node['privoxy']['config_dir']}/privoxy-blocklist.sh"
+    Chef::Log.info "Download adblock lists"
   end
+end
+
+service "privoxy" do
+  action [:enable, :start]
 end

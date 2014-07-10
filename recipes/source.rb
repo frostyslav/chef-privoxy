@@ -18,45 +18,41 @@
 # limitations under the License.
 #
 
-version = node[:privoxy][:version]
-install_path = "#{node[:privoxy][:exec_prefix_dir]}/sbin/privoxy"
+include_recipe "checkinstall"
+
+remote_file "#{Chef::Config['file_cache_path']}/privoxy-#{node['privoxy']['version']}-stable.tar.gz" do
+  source   "#{node['privoxy']['url']}/privoxy-#{node['privoxy']['version']}-stable-src.tar.gz"
+  checksum node['privoxy']['checksum']
+  mode     00644
+end
+
+checkinstall_package "privoxy" do
+  source_archive "#{Chef::Config['file_cache_path']}/privoxy-#{node['privoxy']['version']}-stable.tar.gz"
+  configure_options node['privoxy']['configure_options']
+  version node['privoxy']['version']
+  autoheader true
+  autoconf true
+  configure false
+end
 
 directory "/var/log/privoxy" do
-  owner node[:privoxy][:user]
-  group node[:privoxy][:group]
+  owner node['privoxy']['user']
+  group node['privoxy']['group']
   mode  00755
   action :create
 end
 
-remote_file "#{Chef::Config[:file_cache_path]}/privoxy-#{version}.tar.gz" do
-  source   "#{node[:privoxy][:url]}/privoxy-#{version}-stable-src.tar.gz"
-  checksum node[:privoxy][:checksum]
-  mode     00644
+file "/var/log/privoxy/logfile" do
+  owner node['privoxy']['user']
+  group node['privoxy']['group']
+  mode  00644
+  action :create
 end
 
-configure_options = node[:privoxy][:configure_options].join(" ")
-privoxy_install = false
-
-if File.exists?(install_path)
-  cmd = Mixlib::ShellOut.new(node[:version_check][:command])
-  cmd.run_command
-  matches = cmd.stdout.downcase.squeeze(' ').match(/version\s?: ([0-9\.]+)/)
-  current_version = matches[1]
-  if Gem::Version.new(version) > Gem::Version.new(current_version)
-    privoxy_install = true
-  end
-else
-  privoxy_install = true
-end
-
-bash "build-and-install-privoxy" do
-  cwd Chef::Config[:file_cache_path]
-  code <<-EOF
-  mkdir privoxy-#{version}
-  tar --extract --file=privoxy-#{version}.tar.gz --strip-components=1 --directory=privoxy-#{version}
-  (cd privoxy-#{version} && autoheader && autoconf && ./configure #{configure_options})
-  (cd privoxy-#{version} && make && checkinstall #{node[:checkinstall][:options]})
-  chown -R #{node[:privoxy][:user]}:#{node[:privoxy][:group]} #{node[:privoxy][:config_dir]}
-  EOF
-  not_if { privoxy_install == false }
+# Privoxy installer doesn't set the correct rights at the installation time
+# and service can't start if the rights are wrong
+execute "change configuration directory owner" do
+  command "chown -R #{node['privoxy']['user']}:#{node['privoxy']['group']} #{node['privoxy']['config_dir']}"
+  Chef::Log.info "Change privoxy configuration directory owner"
+  only_if "ls -l #{node['privoxy']['config_dir']} | grep root"
 end

@@ -172,7 +172,7 @@ echo "No config found in ${SCRIPTCONF}. Creating default one and exiting because
 
 # array of URL for AdblockPlus lists
 # for more sources just add it within the round brackets
-URLS=(\"<%= node[:privoxy][:url][:list].join(" ") %>\")
+URLS=(\"<%= node['privoxy']['url']['list'].join(" ") %>\")
 
 # config for privoxy initscript providing PRIVOXY_CONF, PRIVOXY_USER and PRIVOXY_GROUP
 INIT_CONF=\"/etc/conf.d/privoxy\"
@@ -270,7 +270,7 @@ done
 
 debug "URL-List: ${URLS}\nPrivoxy-Configdir: ${PRIVOXY_DIR}\nTemporary directory: ${TMPDIR}" 2
 main
-
+touch ${PRIVOXY_DIR}/<%= node['privoxy']['created']['file'] %>
 # restore default exit command
 trap - INT TERM EXIT
 [ ${DBG} -lt 3 ] && rm -r ${VERBOSE} "${TMPDIR}"

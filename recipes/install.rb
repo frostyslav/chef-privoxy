@@ -18,33 +18,14 @@
 # limitations under the License.
 #
 
-user node[:privoxy][:user] do
+user node['privoxy']['user'] do
   comment "Privoxy user"
   system true
   shell "/bin/false"
 end
 
-group node[:privoxy][:group] do
+group node['privoxy']['group'] do
   system true
 end
 
-case node[:platform]
-  when "debian", "ubuntu"
-    node.default[:checkinstall][:options] = "-y"
-    node.default[:version_check][:command] = "dpkg -s privoxy"
-    %w{make g++ checkinstall}.each do |pkg|
-      package pkg do
-        action :install
-      end
-    end
-  when "redhat", "centos", "amazon", "scientific"
-    node.default[:checkinstall][:options] = "-R -y --install=yes"
-    node.default[:version_check][:command] = "rpm -qi privoxy"
-    %w{gcc-c++ checkinstall}.each do |pkg|
-      package pkg do
-        action :install
-      end
-    end
-end
-
-include_recipe "privoxy::#{node[:privoxy][:install_method]}"
+include_recipe "privoxy::#{node['privoxy']['install_method']}"
