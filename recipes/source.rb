@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-include_recipe "checkinstall"
+include_recipe "checkinstall::default"
 
 remote_file "#{Chef::Config['file_cache_path']}/privoxy-#{node['privoxy']['version']}-stable.tar.gz" do
   source   "#{node['privoxy']['url']}/privoxy-#{node['privoxy']['version']}-stable-src.tar.gz"
