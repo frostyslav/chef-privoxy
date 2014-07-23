@@ -32,7 +32,6 @@ checkinstall_package "privoxy" do
   version node['privoxy']['version']
   autoheader true
   autoconf true
-  configure false
 end
 
 directory "/var/log/privoxy" do
