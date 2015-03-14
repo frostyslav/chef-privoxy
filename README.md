@@ -45,7 +45,7 @@ Attributes
   - Integer. 0 to start with all the features toggled off, 1 to start toggled on
   - Defaults to 1
 
-* `privoxy['additional_options']
+* `privoxy['additional_options']`
   - Hash. Additional privoxy configuration options undefined in the template
   - Defaults to {}
 
