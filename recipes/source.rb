@@ -48,8 +48,8 @@ file "/var/log/privoxy/logfile" do
   action :create
 end
 
-# Privoxy installer doesn't set the correct rights at the installation time
-# and service can't start if the rights are wrong
+# Privoxy installer doesn't set the correct permissions at the installation time
+# and service can't start if the permissions are wrong
 execute "change configuration directory owner" do
   command "chown -R #{node['privoxy']['user']}:#{node['privoxy']['group']} #{node['privoxy']['config_dir']}"
   Chef::Log.info "Change privoxy configuration directory owner"

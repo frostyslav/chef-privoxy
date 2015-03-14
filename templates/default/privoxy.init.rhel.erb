@@ -20,7 +20,7 @@ P_NAME=Privoxy
 # Path to executable.
 P_DAEMON=privoxy
 # Full path to location of Privoxy config file.
-P_CONF_FILE=/etc/privoxy/config
+P_CONF_FILE=<%= node['privoxy']['config_dir'] %>/config
 # Full path to PID file location. Location must be writable by
 # whoever runs this script and by Privoxy itself.
 P_PIDFILE=/var/run/privoxy.pid

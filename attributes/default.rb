@@ -21,7 +21,6 @@
 default['privoxy']['user'] = "privoxy"
 default['privoxy']['group'] = "privoxy"
 default['privoxy']['install_method'] = "source"
-default['chef']['secretpath'] = "/opt/chef_secret_key"
 
 default['privoxy']['adblockplus_subscription'] = false
 default['privoxy']['created']['file'] = "adblocklists.created"
@@ -33,16 +32,20 @@ default['privoxy']['url']['list'] = [
 ]
 
 default['privoxy']['port'] = "8090"
+default['privoxy']['toggle'] = 1
+default['privoxy']['buffer_limit'] = 4096
+default['privoxy']['keepalive_timeout'] = 5
+default['privoxy']['socket_timeout'] = 300
+default['privoxy']['additional_options'] = {}
 
-default['privoxy']['url'] = "http://iweb.dl.sourceforge.net/project/ijbswa/Sources/3.0.21%20%28stable%29"
-default['privoxy']['version'] = "3.0.21"
+default['privoxy']['version'] = "3.0.23"
+default['privoxy']['url'] = "http://iweb.dl.sourceforge.net/project/ijbswa/Sources/#{privoxy['version']}%20%28stable%29"
 default['privoxy']['checksum'] = "5ec7e601948d2bd0ebf0ebe90eed7d49e7663c395ce16d0403e91ea2d459ddb8"
 default['privoxy']['prefix_dir'] = "/"
 default['privoxy']['exec_prefix_dir'] = "/usr"
 default['privoxy']['log_dir'] = "/var/log/privoxy"
 default['privoxy']['config_dir'] = "/etc/privoxy"
 default['privoxy']['doc_dir'] = "/usr/share"
-default['privoxy']['config_dir'] = "/etc/privoxy"
 default['privoxy']['configure_options'] = %W{
 --prefix=#{privoxy['prefix_dir']}
 --exec-prefix=#{privoxy['exec_prefix_dir']}

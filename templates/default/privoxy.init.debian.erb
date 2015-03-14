@@ -24,10 +24,10 @@ NAME=privoxy
 DAEMON=/usr/sbin/$NAME
 PIDFILE=/var/run/$NAME.pid
 OWNER=privoxy
-CONFIGFILE=/etc/privoxy/config
+CONFIGFILE=<%= node['privoxy']['config_dir'] %>/config
 DAEMON_ARGS="--pidfile $PIDFILE --user $OWNER $CONFIGFILE"
 SCRIPTNAME=/etc/init.d/$NAME
-LOGDIR=/var/log/privoxy
+LOGDIR=<%= node['privoxy']['log_dir'] %>
 DEFAULTSFILE=/etc/default/$NAME
 
 # Exit if the package is not installed
